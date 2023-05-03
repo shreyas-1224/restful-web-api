@@ -1,0 +1,40 @@
+what is general use of UserDaoService class
+
+A UserDaoService class is typically used as a data access object for managing user data in a database or any other data storage mechanism. It contains methods to create, read, update, and delete user data in the data storage.
+
+For example, if you have a Spring Boot application that needs to store user information in a database, you could create a User entity class to represent the user, and then create a UserDaoService class to handle the CRUD (create, read, update, delete) operations for the User entity.
+
+The UserDaoService class would typically use an instance of a JpaRepository or CrudRepository class from Spring Data JPA to perform the database operations. This allows the UserDaoService to be decoupled from the actual database implementation, making it easier to switch to a different database or data storage mechanism in the future.
+
+______________________________________________________________________________________________________________________________________________________________
+
+Customised exception :
+
+public class UserNotFoundException extends RuntimeException {
+
+    public UserNotFoundException(Long id) {
+        super("User not found with id " + id);
+    }
+}
+
+...
+
+// In some controller method:
+throw new UserNotFoundException(123L);
+
+...
+
+// In the exception handler method:
+@ExceptionHandler(UserNotFoundException.class)
+public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex) {
+    String message = ex.getMessage(); // message will be "User not found with id 123"
+    ...
+}
+
+documentation :
+at first we create a custom exception and call super constructor with appropriate message.
+if anywhere in code , we throw that exception , it will construct the response entity from that message.
+
+flow:
+
+throw exception-->controllerAdvice annoted class runs-->ExceptionHandler annoted method will run(ex.message from handler class);
